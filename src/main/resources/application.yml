@@ -1,0 +1,45 @@
+server:
+  port: 5000
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/users/**
+#          filters:
+#             - args:
+#                name: USER-SERVICE
+#                fallbackuri: forward:/user-service
+        - id: DEPARTMENT-SERVICE
+          uri: lb://DEPARTMENT-SERVICE
+          predicates:
+            - Path=/departments/**
+#          filters:
+#            args:
+#              name: DEPARTMENT-SERVICE
+#              fallbackuri: forward:/department-service
+
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 4000
+
+
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    hostname: localhost
