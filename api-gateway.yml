@@ -1,0 +1,38 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-app
+  labels:
+    app: api-gateway-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app : api-gateway-app
+  template:
+    metadata:
+      labels:
+        app: api-gateway-app
+    spec:
+      containers:
+      - name: api-gateway-app
+        image: userubuntu/api-gateway:1
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 5000
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  api-gateway-svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port:  80
+    targetPort:  5000
+    protocol: TCP
+  selector:
+    app:  api-gateway-app
