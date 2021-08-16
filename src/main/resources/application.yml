@@ -11,18 +11,20 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/users/**
-#          filters:
-#             - args:
-#                name: USER-SERVICE
-#                fallbackuri: forward:/user-service
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: USER-SERVICE
+                fallbackUri: forward:/user-service
         - id: DEPARTMENT-SERVICE
           uri: lb://DEPARTMENT-SERVICE
           predicates:
             - Path=/departments/**
-#          filters:
-#            args:
-#              name: DEPARTMENT-SERVICE
-#              fallbackuri: forward:/department-service
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: DEPARTMENT-SERVICE
+                fallbackUri: forward:/department-service
 
 hystrix:
   command:
